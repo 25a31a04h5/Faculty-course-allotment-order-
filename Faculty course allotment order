@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_FACULTY 5
+#define MAX_COURSE 5
+
+struct Faculty {
+    int id;
+    char name[30];
+    int maxLoad;
+    int currentLoad;
+};
+
+struct Course {
+    int id;
+    char name[30];
+    int assigned;   // 0 = not assigned, 1 = assigned
+};
+
+int main() {
+    struct Faculty f[MAX_FACULTY];
+    struct Course c[MAX_COURSE];
+    int i, j;
+
+    // Faculty details
+    printf("ENTER FACULTY DETAILS\n");
+    for (i = 0; i < MAX_FACULTY; i++) {
+        f[i].id = i + 1;
+        printf("\nEnter name of Faculty %d: ", i + 1);
+        scanf("%s", f[i].name);
+        printf("Enter max workload: ");
+        scanf("%d", &f[i].maxLoad);
+        f[i].currentLoad = 0;
+    }
+
+    // Course details
+    printf("\nENTER COURSE DETAILS\n");
+    for (i = 0; i < MAX_COURSE; i++) {
+        c[i].id = i + 1;
+        printf("\nEnter course name %d: ", i + 1);
+        scanf("%s", c[i].name);
+        c[i].assigned = 0;
+    }
+
+    // Course allotment logic
+    printf("\nCOURSE ALLOTMENT\n");
+    for (i = 0; i < MAX_COURSE; i++) {
+        for (j = 0; j < MAX_FACULTY; j++) {
+            if (f[j].currentLoad < f[j].maxLoad && c[i].assigned == 0) {
+                printf("Course %s allotted to Faculty %s\n",
+                       c[i].name, f[j].name);
+                f[j].currentLoad++;
+                c[i].assigned = 1;
+                break;   // stop after one allotment
+            }
+        }
+        if (c[i].assigned == 0) {
+            printf("Course %s could not be allotted\n", c[i].name);
+        }
+    }
+
+    // Display final faculty load
+    printf("\nFINAL FACULTY LOAD\n");
+    for (i = 0; i < MAX_FACULTY; i++) {
+        printf("Faculty %s -> Load: %d / %d\n",
+               f[i].name, f[i].currentLoad, f[i].maxLoad);
+    }
+
+    return 0;
+}
